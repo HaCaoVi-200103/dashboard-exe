@@ -4,9 +4,8 @@ import {
 
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { formatPriceVND } from '../../utils';
 import { useAppContext } from '../../context/AppContext';
-import { createCategoryAPI, updateCategoryAPI } from '../../api/category';
+import { updateCategoryAPI } from '../../api/category';
 
 interface IProps {
     isUpdateModalOpen: boolean;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown, Space } from 'antd';
@@ -36,7 +36,6 @@ const items: MenuProps['items'] = [
 ];
 
 const DropdownCustomize: React.FC = () => {
-    const [value, setValue] = useState("")
     return (
         <Dropdown menu={{ items }} >
             <Space >

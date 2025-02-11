@@ -28,7 +28,6 @@ const UpdateProductModal = (props: IProps) => {
     } = props;
     const { refreshProduct, setRefreshProduct } = useAppContext()
     const [form] = Form.useForm();
-    const [selected, setSelected] = useState<string>("");
     const [urlUpload, setUrlUpload] = useState<string>("")
     const price = Form.useWatch('pro_price', form);
     const discount = Form.useWatch('pro_discount', form);
@@ -146,10 +145,7 @@ const UpdateProductModal = (props: IProps) => {
                 >
                     <Form.Item hasFeedback name="cate_id" label="Category" rules={[{ required: true, message: "Please choose category" }]}>
                         <Select
-                            // defaultValue={category}
                             placeholder="Choose category for product"
-                            //  menuItemSelectedIcon={icon} 
-                            onChange={setSelected}
                             allowClear>
                             {
                                 listCate && listCate.length > 0 && listCate.map((item, index) => (

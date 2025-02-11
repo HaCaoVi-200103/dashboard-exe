@@ -1,5 +1,5 @@
-import { CloudUploadOutlined, DeleteOutlined, DeleteTwoTone, EditOutlined, EditTwoTone, FileSearchOutlined, FilterOutlined, FlagTwoTone, SearchOutlined, UploadOutlined, UserAddOutlined } from "@ant-design/icons";
-import { Button, Col, Image, notification, Popconfirm, Tooltip } from "antd";
+import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, FilterOutlined, SearchOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Image, notification, Popconfirm, Tooltip } from "antd";
 import { ColumnsType } from "antd/es/table";
 import InputCustomize from "../../components/Input";
 import TableCustomize from "../../components/Table";
@@ -11,7 +11,7 @@ import { useAppContext } from "../../context/AppContext";
 import CreateProductModal from "../Modal/create.product.modal";
 import UpdateProductModal from "../Modal/update.product.model";
 import SelectCustomize from "../Select";
-import { getCategoryAllAPI, getCategoryListAPI } from "../../api/category";
+import { getCategoryAllAPI } from "../../api/category";
 import AddGalleryModal from "../Modal/add.gallery.modal";
 import { getGalleryListByProIdAPI } from "../../api/gallery";
 
@@ -38,7 +38,7 @@ const ProductTable = (props: IProps) => {
     const [dataProductId, setDataProductId] = useState<IProduct | null>(null)
     const [search, setSearch] = useState("")
     const [filterReq, setFilterReq] = useState("")
-    const { refreshProduct, setRefreshProduct, refreshCategory, refreshGallery } = useAppContext()
+    const { refreshProduct, setRefreshProduct, refreshCategory } = useAppContext()
     const [listCate, setListCate] = useState<ICategory[] | []>([])
     const [listGallery, setListGallery] = useState<IGallery[]>([])
 
@@ -90,7 +90,7 @@ const ProductTable = (props: IProps) => {
             title: 'Image',
             dataIndex: 'pro_picture',
             key: 'pro_picture',
-            render: (value, record, index) => (
+            render: (value) => (
                 <Image style={{ width: "50px", height: "50px" }} src={value !== "" ? value : NoImage} />
             ),
         },
@@ -98,7 +98,7 @@ const ProductTable = (props: IProps) => {
             title: 'Type',
             dataIndex: 'cate_id',
             key: 'cate_id',
-            render: (value, record, index) => (
+            render: (value) => (
                 <div>{value.cate_name}</div>
             ),
         },
@@ -106,7 +106,7 @@ const ProductTable = (props: IProps) => {
             title: 'Price',
             dataIndex: 'pro_price',
             key: 'pro_price',
-            render: (value, record, index) => {
+            render: (value, record) => {
                 return (
                     <div style={{ display: "flex", gap: 10 }}>
                         <div style={{ opacity: 0.5, textDecoration: 'line-through', textDecorationColor: 'gray', textDecorationThickness: '1px' }}
@@ -124,7 +124,7 @@ const ProductTable = (props: IProps) => {
             title: 'Discount',
             dataIndex: 'pro_discount',
             key: 'pro_discount',
-            render: (value, record, index) => {
+            render: (value, record) => {
                 return (
                     <>
                         {value === 0 ?
@@ -141,7 +141,7 @@ const ProductTable = (props: IProps) => {
             title: 'Action',
             dataIndex: 'is_deleted',
             key: 'is_deleted',
-            render: (value, record, index) => {
+            render: (__, record) => {
                 return (
                     <div style={{ display: "flex", gap: 20, justifyContent: "start" }}>
                         <Tooltip title="Add gallery">
@@ -167,7 +167,6 @@ const ProductTable = (props: IProps) => {
                         >
                             <DeleteTwoTone style={{ fontSize: 20 }} twoToneColor={"#F04770"} />
                         </Popconfirm>
-
                     </div>
                 )
             },
@@ -201,8 +200,7 @@ const ProductTable = (props: IProps) => {
             <TableCustomize columns={columns} dataSource={dataTable} meta={metaTable} />
             <CreateProductModal listCate={listCate} isCreateModalOpen={isCreateModalOpen} setIsCreateModalOpen={setIsCreateModalOpen} />
             <UpdateProductModal listCate={listCate} data={dataProductId} isUpdateModalOpen={isUpdateModalOpen} setIsUpdateModalOpen={setIsUpdateModalOpen} />
-            <AddGalleryModal refreshGallery={getGalleryList} listGallery={listGallery} id={dataProductId?._id || ""} isGalleryModalOpen={isAddGalleryOpen} setIsGalleryModalOpen={setIsAddGalleryOpen} />
-
+            <AddGalleryModal listGallery={listGallery} id={dataProductId?._id || ""} isGalleryModalOpen={isAddGalleryOpen} setIsGalleryModalOpen={setIsAddGalleryOpen} />
         </>
     )
 }

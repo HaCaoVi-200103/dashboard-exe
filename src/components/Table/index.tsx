@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Table } from "antd";
 import { useSearchParams, useNavigate } from "react-router";
 import { ColumnsType } from "antd/es/table";
-import { FilterValue, SorterResult, TableCurrentDataSource, TablePaginationConfig } from "antd/es/table/interface";
+import { TablePaginationConfig } from "antd/es/table/interface";
 interface IProps<T> {
     dataSource: T[];
     columns: ColumnsType<T>;
@@ -18,7 +18,7 @@ const TableCustomize = <T,>(props: IProps<T>) => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
-    const onChange = (pagination: TablePaginationConfig, filters: Record<string, FilterValue | null>, sorter: SorterResult<T> | SorterResult<T>[], extra: TableCurrentDataSource<T>) => {
+    const onChange = (pagination: TablePaginationConfig) => {
         if (pagination && pagination.current) {
             const params = new URLSearchParams(searchParams);
             params.set('current', pagination.current.toString());

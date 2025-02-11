@@ -1,11 +1,10 @@
-import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, SearchOutlined } from "@ant-design/icons";
+import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { Button, notification, Popconfirm } from "antd";
 import { ColumnsType } from "antd/es/table";
-import InputCustomize from "../../components/Input";
 import TableCustomize from "../../components/Table";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { deleteCategoryAPI, getCategoryAllAPI } from "../../api/category";
+import { deleteCategoryAPI } from "../../api/category";
 import CreateCategoryModal from "../Modal/create.category.modal";
 import UpdateCategoryModal from "../Modal/update.category.modal";
 

@@ -10,7 +10,6 @@ import {
 import type { MenuProps } from 'antd';
 import { useAppContext } from "../../context/AppContext";
 import { Link, useLocation } from "react-router";
-import { useState } from "react";
 
 type MenuItem = Required<MenuProps>['items'][number];
 const DashboardSideBar = () => {
@@ -18,7 +17,6 @@ const DashboardSideBar = () => {
     const { collapseMenu } = useAppContext()!;
     const location = useLocation();
 
-    const [pathActive, setPathActive] = useState<string>(location.pathname)
     const items: MenuItem[] = [
 
         {
@@ -90,7 +88,7 @@ const DashboardSideBar = () => {
         >
             <Menu
                 mode="inline"
-                defaultSelectedKeys={[pathActive]}
+                defaultSelectedKeys={[location.pathname]}
                 items={items}
                 style={{ height: '100vh' }}
             />

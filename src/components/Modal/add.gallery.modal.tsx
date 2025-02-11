@@ -4,33 +4,29 @@ import {
     Button,
     UploadProps,
     Image,
-
 } from 'antd';
 import Cookies from "js-cookie";
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useAppContext } from '../../context/AppContext';
 import { DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import Dragger from 'antd/es/upload/Dragger';
-import { createGalleryAPI, deleteGalleryAPI, getGalleryListByProIdAPI } from '../../api/gallery';
+import { createGalleryAPI, deleteGalleryAPI } from '../../api/gallery';
 
 interface IProps {
     isGalleryModalOpen: boolean;
     setIsGalleryModalOpen: (v: boolean) => void;
     id: string;
     listGallery: IGallery[];
-    refreshGallery: (id: any) => void
 }
 
 const AddGalleryModal = (props: IProps) => {
     const {
-        isGalleryModalOpen, setIsGalleryModalOpen, id, listGallery, refreshGallery
+        isGalleryModalOpen, setIsGalleryModalOpen, id, listGallery,
     } = props;
     const { refreshProduct, setRefreshProduct } = useAppContext()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [listPicture, setListPicture] = useState<string[]>([])
-    const [newGallery, setNewGallery] = useState<IGallery[]>([])
-    const [currentGallery, setCurrentGallery] = useState<IGallery[]>(listGallery)
     const uploadErrorShown = useRef(false);
 
     const handleCloseCreateModal = () => {
@@ -84,7 +80,7 @@ const AddGalleryModal = (props: IProps) => {
         headers: {
             authorization: `Bearer ${Cookies.get("token")}`,
         },
-        beforeUpload: (file, fileList) => {
+        beforeUpload: (__, fileList) => {
             if (fileList.length > 6) {
                 if (!uploadErrorShown.current) {
                     notification.error({ message: "You can only upload up to 6 images!" });
@@ -114,27 +110,13 @@ const AddGalleryModal = (props: IProps) => {
         const res = await deleteGalleryAPI(id)
 
         if (res.statusCode === 200) {
-            await getGalleryList(id)
             return notification.success({ message: res.message })
 
         }
         return notification.error({ message: res.message })
     }
 
-    const getGalleryList = async (id: string) => {
-        const res = await getGalleryListByProIdAPI(id)
-        if (res.statusCode === 200) {
-            setNewGallery(res.data!)
-        }
-    }
 
-    useEffect(() => {
-        if (newGallery.length > 0) {
-            setCurrentGallery(newGallery)
-        } else {
-            setCurrentGallery(listGallery)
-        }
-    }, [newGallery, listGallery])
     return (
         <div>
             <Modal

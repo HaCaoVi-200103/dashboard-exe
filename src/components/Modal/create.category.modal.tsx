@@ -3,8 +3,7 @@ import {
     notification,
 
 } from 'antd';
-import { useEffect, useState } from 'react';
-import { formatPriceVND } from '../../utils';
+import { useState } from 'react';
 import { useAppContext } from '../../context/AppContext';
 import { createCategoryAPI } from '../../api/category';
 
