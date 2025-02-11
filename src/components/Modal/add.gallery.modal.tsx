@@ -83,6 +83,7 @@ const AddGalleryModal = (props: IProps) => {
         listType: "picture",
         maxCount: undefined,
         accept: ".jpg,.jpeg,.png",
+        withCredentials: true,
         headers: {
             authorization: `Bearer ${Cookies.get("token")}`,
         },

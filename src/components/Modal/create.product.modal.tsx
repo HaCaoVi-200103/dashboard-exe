@@ -98,6 +98,7 @@ const CreateProductModal = (props: IProps) => {
         headers: {
             authorization: `Bearer ${Cookies.get("token")}`,
         },
+        withCredentials: true,
         onChange(info) {
             if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);

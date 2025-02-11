@@ -17,6 +17,7 @@ const Login = () => {
             const res: IBEResponse<ILogin> = await loginAPI(values.email!, values.password!)
 
             if (res.data) {
+                Cookies.set("token", res.data.token)
                 return navigate("/")
             }
 
