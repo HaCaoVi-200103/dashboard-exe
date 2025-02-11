@@ -4,7 +4,7 @@ import { Button, Form, FormProps, Input, notification } from "antd"
 import { useNavigate } from "react-router";
 import { loginAPI } from "../../api/login";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 type FieldType = {
     email?: string;
     password?: string;
@@ -12,12 +12,16 @@ type FieldType = {
 const Login = () => {
     const navigate = useNavigate();
     const token = Cookies.get("token")
+    const [loading, setLoading] = useState(false)
+
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         try {
+            setLoading(false)
             const res: IBEResponse<ILogin> = await loginAPI(values.email!, values.password!)
-
+            setLoading(true)
             if (res.data) {
                 Cookies.set("token", res.data.token)
+                notification.success({ message: "Login Successfully" })
                 return navigate("/")
             }
 
@@ -75,7 +79,7 @@ const Login = () => {
                     </Form.Item>
 
 
-                    <Button style={{ width: 300 }} type="primary" htmlType="submit">
+                    <Button loading={loading} style={{ width: 300 }} type="primary" htmlType="submit">
                         Login
                     </Button>
                 </Form>
