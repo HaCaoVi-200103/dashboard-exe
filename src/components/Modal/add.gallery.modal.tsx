@@ -36,16 +36,22 @@ const AddGalleryModal = (props: IProps) => {
     }
 
     const onFinish = async () => {
-        setLoading(true)
-        const res = await createGalleryAPI(id, listPicture)
+        try {
+            setLoading(true)
+            const res = await createGalleryAPI(id, listPicture)
 
-        if (res.statusCode === 201) {
+            if (res.statusCode === 201) {
+                notification.success({ message: res.message })
+                setLoading(false)
+                form.resetFields()
+                setRefreshProduct(!refreshProduct)
+                setIsGalleryModalOpen(false);
+                return;
+            }
+
             notification.success({ message: res.message })
-            setLoading(false)
-            form.resetFields()
-            setRefreshProduct(!refreshProduct)
-            setIsGalleryModalOpen(false);
-            return;
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -107,13 +113,16 @@ const AddGalleryModal = (props: IProps) => {
     };
 
     const handleRemoveImage = async (id: string) => {
-        const res = await deleteGalleryAPI(id)
+        try {
+            const res = await deleteGalleryAPI(id)
 
-        if (res.statusCode === 200) {
-            return notification.success({ message: res.message })
-
+            if (res.statusCode === 200) {
+                return notification.success({ message: res.message })
+            }
+            return notification.error({ message: res.message })
+        } catch (error) {
+            console.log(error);
         }
-        return notification.error({ message: res.message })
     }
 
 

@@ -38,11 +38,18 @@ const CategoryTable = (props: IProps) => {
     }, [dataSource, meta])
 
     const handleDeleteCategory = async (id: string) => {
-        const res = await deleteCategoryAPI(id);
+        try {
+            const res = await deleteCategoryAPI(id);
 
-        if (res.statusCode === 200) {
-            setRefreshProduct(!refreshProduct)
-            notification.success({ message: res.message })
+            if (res.statusCode === 200) {
+                setRefreshProduct(!refreshProduct)
+                notification.success({ message: res.message })
+                return;
+            }
+
+            notification.error({ message: res.message })
+        } catch (error) {
+            console.log(error);
         }
     }
 

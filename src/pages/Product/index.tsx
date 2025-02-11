@@ -3,6 +3,7 @@ import ProductTable from "../../components/Table/product.table";
 import { useEffect, useState } from "react";
 import { getProductListAPI } from "../../api/product";
 import { useAppContext } from "../../context/AppContext";
+import { notification } from "antd";
 
 const Product = () => {
     const [searchParams] = useSearchParams();
@@ -13,13 +14,20 @@ const Product = () => {
     const { refreshProduct } = useAppContext()
     useEffect(() => {
         const fetchData = async () => {
-            const res = await getProductListAPI(current, pageSize);
-            setData(res.data?.result || []);
-            setMeta({
-                current: res.data?.meta?.current || 1,
-                pageSize: res.data?.meta?.pageSize || 10,
-                total: res.data?.meta?.total || 1,
-            });
+            try {
+                const res = await getProductListAPI(current, pageSize);
+                setData(res.data?.result || []);
+                setMeta({
+                    current: res.data?.meta?.current || 1,
+                    pageSize: res.data?.meta?.pageSize || 10,
+                    total: res.data?.meta?.total || 1,
+                });
+                if (res.statusCode !== 200) {
+                    return notification.warning({ message: "Can't take data product" })
+                }
+            } catch (error) {
+                console.log(error);
+            }
         };
         fetchData();
     }, [current, pageSize, refreshProduct]);

@@ -44,39 +44,56 @@ const ProductTable = (props: IProps) => {
 
     useEffect(() => {
         (async () => {
-            const res = await getCategoryAllAPI()
-            if (res.statusCode === 200) {
-                setListCate(res.data!)
+            try {
+                const res = await getCategoryAllAPI()
+                if (res.statusCode === 200) {
+                    setListCate(res.data!)
+                }
+            } catch (error) {
+                console.log(error);
             }
         })()
     }, [isCreateModalOpen, isUpdateModalOpen, refreshCategory])
 
     useEffect(() => {
         (async () => {
-            if (search.length > 0 || filterReq.length > 0) {
-                const res = await getProductListByFilterAndSearchAPI(metaDefault.current, metaDefault.LIMIT, search, filterReq)
-                setDataTable(res.data?.result!)
-                setMetaTable(res.data?.meta!)
-            } else {
-                setMetaTable(meta)
-                setDataTable(dataSource)
+            try {
+                if (search.length > 0 || filterReq.length > 0) {
+                    const res = await getProductListByFilterAndSearchAPI(metaDefault.current, metaDefault.LIMIT, search, filterReq)
+                    setDataTable(res.data?.result!)
+                    setMetaTable(res.data?.meta!)
+                } else {
+                    setMetaTable(meta)
+                    setDataTable(dataSource)
+                }
+            } catch (error) {
+                console.log(error);
             }
         })()
     }, [search, dataSource, filterReq, meta])
 
     const handleDeleteProduct = async (id: string) => {
-        const res = await deleteProductAPI(id);
+        try {
+            const res = await deleteProductAPI(id);
 
-        if (res.statusCode === 200) {
-            setRefreshProduct(!refreshProduct)
-            notification.success({ message: res.message })
+            if (res.statusCode === 200) {
+                setRefreshProduct(!refreshProduct)
+                notification.success({ message: res.message })
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
     const getGalleryList = async (id: string) => {
-        const res = await getGalleryListByProIdAPI(id)
-        if (res.statusCode === 200) {
-            setListGallery(res.data!)
+        try {
+            const res = await getGalleryListByProIdAPI(id)
+            if (res.statusCode === 200) {
+                setListGallery(res.data!)
+            }
+        } catch (error) {
+            console.log(error);
+            notification.warning({ message: "Can't take data gallery!" })
         }
     }
 

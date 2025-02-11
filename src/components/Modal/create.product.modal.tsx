@@ -48,29 +48,35 @@ const CreateProductModal = (props: IProps) => {
     }
 
     const onFinish = async (values: ICreateProductForm) => {
-        setLoading(true)
-        const dataConfig: ICreateProductRequest = {
-            cate_id: values.cate_id,
-            pro_name: values.pro_name,
-            pro_price: values.pro_price,
-            pro_discount: values.pro_discount,
-            pro_size: values.pro_size,
-            pro_description: values.pro_description,
-            pro_picture: urlUpload
-        }
+        try {
+            setLoading(true)
+            const dataConfig: ICreateProductRequest = {
+                cate_id: values.cate_id,
+                pro_name: values.pro_name,
+                pro_price: values.pro_price,
+                pro_discount: values.pro_discount,
+                pro_size: values.pro_size,
+                pro_description: values.pro_description,
+                pro_picture: urlUpload
+            }
 
-        if (urlUpload === "") {
-            return notification.warning({ message: "Image not uploaded yet, please try again!" })
-        }
+            if (urlUpload === "") {
+                return notification.warning({ message: "Image not uploaded yet, please try again!" })
+            }
 
-        const res = await createProductAPI(dataConfig)
-        if (res.statusCode === 201) {
-            notification.success({ message: res.message })
-            setLoading(false)
-            form.resetFields()
-            setRefreshProduct(!refreshProduct)
-            setIsCreateModalOpen(false);
-            return;
+            const res = await createProductAPI(dataConfig)
+            if (res.statusCode === 201) {
+                notification.success({ message: res.message })
+                setLoading(false)
+                form.resetFields()
+                setRefreshProduct(!refreshProduct)
+                setIsCreateModalOpen(false);
+                return;
+            }
+
+            return notification.error({ message: res.message })
+        } catch (error) {
+            console.log(error);
         }
     };
 

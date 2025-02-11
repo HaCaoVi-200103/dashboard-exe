@@ -48,24 +48,29 @@ const UpdateProductModal = (props: IProps) => {
     }
 
     const onFinish = async (values: ICreateProductForm) => {
-        const dataConfig: ICreateProductRequest = {
-            cate_id: values.cate_id,
-            pro_name: values.pro_name,
-            pro_price: values.pro_price,
-            pro_discount: values.pro_discount,
-            pro_size: values.pro_size,
-            pro_description: values.pro_description,
-            pro_picture: urlUpload ? urlUpload : data?.pro_picture + ""
-        }
-        setLoading(true);
-        const res = await updateProductAPI(data?._id!, dataConfig)
-        if (res.statusCode === 200) {
-            notification.success({ message: res.message })
-            setLoading(false)
-            form.resetFields()
-            setRefreshProduct(!refreshProduct)
-            setIsUpdateModalOpen(false);
-            return;
+        try {
+            const dataConfig: ICreateProductRequest = {
+                cate_id: values.cate_id,
+                pro_name: values.pro_name,
+                pro_price: values.pro_price,
+                pro_discount: values.pro_discount,
+                pro_size: values.pro_size,
+                pro_description: values.pro_description,
+                pro_picture: urlUpload ? urlUpload : data?.pro_picture + ""
+            }
+            setLoading(true);
+            const res = await updateProductAPI(data?._id!, dataConfig)
+            if (res.statusCode === 200) {
+                notification.success({ message: res.message })
+                setLoading(false)
+                form.resetFields()
+                setRefreshProduct(!refreshProduct)
+                setIsUpdateModalOpen(false);
+                return;
+            }
+            return notification.error({ message: res.message })
+        } catch (error) {
+            console.log(error);
         }
     };
 

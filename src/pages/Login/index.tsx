@@ -13,20 +13,24 @@ const Login = () => {
     const navigate = useNavigate();
     const token = Cookies.get("token")
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        const res: IBEResponse<ILogin> = await loginAPI(values.email!, values.password!)
+        try {
+            const res: IBEResponse<ILogin> = await loginAPI(values.email!, values.password!)
 
-        if (res.data) {
-            return navigate("/")
-        }
+            if (res.data) {
+                return navigate("/")
+            }
 
-        if (res.statusCode === 404) {
-            return notification.warning({
-                message: res.message
-            })
-        } else if (res.statusCode === 400) {
-            notification.warning({
-                message: res.message
-            })
+            if (res.statusCode === 404) {
+                return notification.warning({
+                    message: res.message
+                })
+            } else if (res.statusCode === 400) {
+                notification.warning({
+                    message: res.message
+                })
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 

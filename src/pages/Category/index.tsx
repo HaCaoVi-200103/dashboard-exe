@@ -13,13 +13,17 @@ const Category = () => {
     const { refreshProduct } = useAppContext()
     useEffect(() => {
         const fetchData = async () => {
-            const res = await getCategoryListAPI(+current, +pageSize);
-            setData(res.data?.result || []);
-            setMeta({
-                current: res.data?.meta?.current || 1,
-                pageSize: res.data?.meta?.pageSize || 10,
-                total: res.data?.meta?.total || 1,
-            });
+            try {
+                const res = await getCategoryListAPI(+current, +pageSize);
+                setData(res.data?.result || []);
+                setMeta({
+                    current: res.data?.meta?.current || 1,
+                    pageSize: res.data?.meta?.pageSize || 10,
+                    total: res.data?.meta?.total || 1,
+                });
+            } catch (error) {
+                console.log(error);
+            }
         };
         fetchData();
     }, [current, pageSize, refreshProduct]);

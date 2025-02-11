@@ -29,15 +29,20 @@ const UpdateCategoryModal = (props: IProps) => {
 
     const onFinish = async (values: any) => {
         setLoading(true)
-        const res = await updateCategoryAPI(dataCate._id, values.cate_name)
+        try {
+            const res = await updateCategoryAPI(dataCate._id, values.cate_name)
 
-        if (res.statusCode === 200) {
-            notification.success({ message: res.message })
-            setLoading(false)
-            form.resetFields()
-            setRefreshCategory(!refreshCategory)
-            setIsUpdateModalOpen(false);
-            return;
+            if (res.statusCode === 200) {
+                notification.success({ message: res.message })
+                setLoading(false)
+                form.resetFields()
+                setRefreshCategory(!refreshCategory)
+                setIsUpdateModalOpen(false);
+                return;
+            }
+            notification.error({ message: res.message })
+        } catch (error) {
+            console.log(error);
         }
     };
 

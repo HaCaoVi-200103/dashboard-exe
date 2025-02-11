@@ -29,16 +29,22 @@ const CreateCategoryModal = (props: IProps) => {
 
     const onFinish = async (values: any) => {
         setLoading(true)
-        const res = await createCategoryAPI(values.cate_name)
+        try {
+            const res = await createCategoryAPI(values.cate_name)
 
-        if (res.statusCode === 201) {
-            notification.success({ message: res.message })
-            setLoading(false)
-            form.resetFields()
-            setRefreshProduct(!refreshProduct)
-            setRefreshCategory(!refreshCategory)
-            setIsCreateModalOpen(false);
-            return;
+            if (res.statusCode === 201) {
+                notification.success({ message: res.message })
+                setLoading(false)
+                form.resetFields()
+                setRefreshProduct(!refreshProduct)
+                setRefreshCategory(!refreshCategory)
+                setIsCreateModalOpen(false);
+                return;
+            }
+
+            notification.error({ message: res.message })
+        } catch (error) {
+            console.log(error);
         }
     };
 
