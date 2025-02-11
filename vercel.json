@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "public": "dist",
+    "outputDirectory": "dist",
     "builds": [
         {
             "src": "dist/*",
