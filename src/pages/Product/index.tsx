@@ -16,8 +16,10 @@ const Product = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setLoading(false)
+                setLoading(true)
                 const res = await getProductListAPI(current, pageSize);
+                setLoading(false)
+
                 if (res.statusCode !== 200) {
                     return notification.warning({ message: "Can't take data product" })
                 }
@@ -28,7 +30,6 @@ const Product = () => {
                     pageSize: res.data?.meta?.pageSize || 10,
                     total: res.data?.meta?.total || 1,
                 });
-                setLoading(true)
             } catch (error) {
                 console.log(error);
             }
@@ -36,7 +37,7 @@ const Product = () => {
         fetchData();
     }, [current, pageSize, refreshProduct]);
 
-    if (!loading) {
+    if (loading) {
         return <Skeleton />
     }
 

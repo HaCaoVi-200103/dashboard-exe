@@ -18,8 +18,9 @@ const Category = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setLoading(false)
+                setLoading(true)
                 const res = await getCategoryListAPI(+current, +pageSize);
+                setLoading(false)
 
                 if (res.statusCode !== 200) {
                     return notification.warning({ message: "Can't take data category" })
@@ -31,7 +32,6 @@ const Category = () => {
                     pageSize: res.data?.meta?.pageSize || 10,
                     total: res.data?.meta?.total || 1,
                 });
-                setLoading(true)
 
             } catch (error) {
                 console.log(error);
@@ -40,7 +40,7 @@ const Category = () => {
         fetchData();
     }, [current, pageSize, refreshProduct]);
 
-    if (!loading) {
+    if (loading) {
         return <Skeleton />
     }
     return (

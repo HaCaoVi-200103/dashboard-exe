@@ -16,9 +16,9 @@ const Login = () => {
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         try {
-            setLoading(false)
-            const res: IBEResponse<ILogin> = await loginAPI(values.email!, values.password!)
             setLoading(true)
+            const res: IBEResponse<ILogin> = await loginAPI(values.email!, values.password!)
+            setLoading(false)
             if (res.data) {
                 Cookies.set("token", res.data.token)
                 notification.success({ message: "Login Successfully" })
@@ -79,7 +79,7 @@ const Login = () => {
                     </Form.Item>
 
 
-                    <Button loading={loading} style={{ width: 300 }} type="primary" htmlType="submit">
+                    <Button disabled={loading} loading={loading} style={{ width: 300 }} type="primary" htmlType="submit">
                         Login
                     </Button>
                 </Form>
