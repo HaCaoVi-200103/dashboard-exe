@@ -1,11 +1,11 @@
-import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, FilterOutlined, SearchOutlined, UploadOutlined } from "@ant-design/icons";
+import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, FilterOutlined, PlusCircleOutlined, PlusCircleTwoTone, SearchOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Image, notification, Popconfirm, Tooltip } from "antd";
 import { ColumnsType } from "antd/es/table";
 import InputCustomize from "../../components/Input";
 import TableCustomize from "../../components/Table";
 import { useEffect, useState } from "react";
 import NoImage from "../../assets/no-image.png"
-import { calculateDiscountPercentage, formatNumber } from "../../utils";
+import { calculateDiscountPercentage, formatNumber, formatNumberDot } from "../../utils";
 import { deleteProductAPI, getProductListByFilterAndSearchAPI } from "../../api/product";
 import { useAppContext } from "../../context/AppContext";
 import CreateProductModal from "../Modal/create.product.modal";
@@ -14,6 +14,7 @@ import SelectCustomize from "../Select";
 import { getCategoryAllAPI } from "../../api/category";
 import AddGalleryModal from "../Modal/add.gallery.modal";
 import { getGalleryListByProIdAPI } from "../../api/gallery";
+import AddQuantityModal from "../Modal/add.quantity.modal";
 
 interface IProps {
     dataSource: IProduct[];
@@ -35,6 +36,7 @@ const ProductTable = (props: IProps) => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
     const [isAddGalleryOpen, setIsAddGalleryOpen] = useState<boolean>(false)
+    const [isAddQuantityOpen, setIsAddQuantityOpen] = useState<boolean>(false)
     const [dataProductId, setDataProductId] = useState<IProduct | null>(null)
     const [search, setSearch] = useState("")
     const [filterReq, setFilterReq] = useState("")
@@ -155,6 +157,31 @@ const ProductTable = (props: IProps) => {
             },
         },
         {
+            title: 'Quantity',
+            dataIndex: 'pro_quantity',
+            key: 'pro_quantity',
+            render: (value, record) => {
+                return (
+                    <div style={{
+                        display: "flex",
+                        gap: 10,
+                        alignItems: "center",
+                        justifyContent: "space-between"
+                    }}>
+                        <div >{formatNumberDot(value | 0) + " SL"}</div>
+                        <Tooltip styles={{
+                            body: { background: "white", color: "#1e272e" }
+                        }} title="Add quantity">
+                            <PlusCircleTwoTone onClick={() => {
+                                setIsAddQuantityOpen(true)
+                                setDataProductId(record)
+                            }} style={{ fontSize: "20px" }} twoToneColor={"#2ecc71"} />
+                        </Tooltip>
+                    </div>
+                )
+            },
+        },
+        {
             title: 'Action',
             dataIndex: 'is_deleted',
             key: 'is_deleted',
@@ -218,6 +245,7 @@ const ProductTable = (props: IProps) => {
             <CreateProductModal listCate={listCate} isCreateModalOpen={isCreateModalOpen} setIsCreateModalOpen={setIsCreateModalOpen} />
             <UpdateProductModal listCate={listCate} data={dataProductId} isUpdateModalOpen={isUpdateModalOpen} setIsUpdateModalOpen={setIsUpdateModalOpen} />
             <AddGalleryModal listGallery={listGallery} id={dataProductId?._id || ""} isGalleryModalOpen={isAddGalleryOpen} setIsGalleryModalOpen={setIsAddGalleryOpen} />
+            <AddQuantityModal data={dataProductId!} isAddQuantityModalOpen={isAddQuantityOpen} setIsAddQuantityModalOpen={setIsAddQuantityOpen} />
         </>
     )
 }

@@ -23,6 +23,7 @@ declare global {
         pro_discount: number,
         pro_size: string[],
         pro_picture: string,
+        pro_quantity: number,
         pro_description: string,
         update_at: string,
         is_deleted: boolean,
@@ -54,6 +55,7 @@ declare global {
         pro_size: string[],
         pro_picture: string,
         pro_description: string,
+        pro_quantity: number
     }
 
     interface ICreateProductForm {
@@ -61,6 +63,7 @@ declare global {
         pro_name: string,
         pro_price: number,
         pro_discount: number,
+        pro_quantity: number,
         pro_size: string[],
         pro_picture: FileList,
         pro_description: string,

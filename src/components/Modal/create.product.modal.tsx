@@ -9,7 +9,7 @@ import {
     UploadProps,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { calculateDiscountPercentage, formatPriceVND } from '../../utils';
+import { calculateDiscountPercentage, formatNumberDot, formatPriceVND } from '../../utils';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { createProductAPI } from '../../api/product';
 import { useAppContext } from '../../context/AppContext';
@@ -29,6 +29,7 @@ const CreateProductModal = (props: IProps) => {
     const [form] = Form.useForm();
     const [urlUpload, setUrlUpload] = useState<string>("")
     const price = Form.useWatch('pro_price', form);
+    const quantity = Form.useWatch('pro_quantity', form);
     const discount = Form.useWatch('pro_discount', form);
     const [loading, setLoading] = useState(false);
 
@@ -57,7 +58,9 @@ const CreateProductModal = (props: IProps) => {
                 pro_discount: values.pro_discount,
                 pro_size: values.pro_size,
                 pro_description: values.pro_description,
-                pro_picture: urlUpload
+                pro_picture: urlUpload,
+                pro_quantity: values.pro_quantity
+
             }
 
             if (urlUpload === "") {
@@ -140,17 +143,39 @@ const CreateProductModal = (props: IProps) => {
                             }
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        hasFeedback
-                        label="Name"
-                        name="pro_name"
-                        rules={[{ required: true, message: 'Please input your product name!' },
-
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-
+                    <Row gutter={[15, 15]}>
+                        <Col span={24} md={17}>
+                            <Form.Item
+                                hasFeedback
+                                label="Name"
+                                name="pro_name"
+                                rules={[{ required: true, message: 'Please input your product name!' },
+                                ]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                        <Col span={24} md={7}>
+                            <Form.Item
+                                extra={formatNumberDot(`${!quantity ? 0 : quantity}`) + " SL"}
+                                hasFeedback
+                                label="Quantity"
+                                name="pro_quantity"
+                                rules={[{ required: true, message: "Please input your product quantity!" },
+                                () => ({
+                                    validator(_, value) {
+                                        if (!value || Number(value) > 0) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error("Price must be greater than 0!"));
+                                    },
+                                }),
+                                ]}
+                            >
+                                <InputNumber style={{ width: "100%" }} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
                     <Row gutter={[15, 15]}>
                         <Col span={24} md={8}>
                             <Form.Item

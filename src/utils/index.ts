@@ -32,3 +32,7 @@ export const formatPriceVND = (price: number | string) => {
     return Number(price).toLocaleString("vi-VN") + " vnd";
 };
 
+export const formatNumberDot = (price: number | string) => {
+    return Number(price).toLocaleString("vi-VN");
+};
+

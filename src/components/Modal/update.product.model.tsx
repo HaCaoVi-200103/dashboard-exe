@@ -9,7 +9,7 @@ import {
     UploadProps,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { calculateDiscountPercentage, formatPriceVND } from '../../utils';
+import { calculateDiscountPercentage, formatNumberDot, formatPriceVND } from '../../utils';
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { updateProductAPI } from '../../api/product';
 import { useAppContext } from '../../context/AppContext';
@@ -31,6 +31,7 @@ const UpdateProductModal = (props: IProps) => {
     const [urlUpload, setUrlUpload] = useState<string>("")
     const price = Form.useWatch('pro_price', form);
     const discount = Form.useWatch('pro_discount', form);
+    const quantity = Form.useWatch('pro_quantity', form);
     const image = Form.useWatch('pro_picture', form);
     const [loading, setLoading] = useState(false);
     const { Option } = Select;
@@ -56,7 +57,8 @@ const UpdateProductModal = (props: IProps) => {
                 pro_discount: values.pro_discount,
                 pro_size: values.pro_size,
                 pro_description: values.pro_description,
-                pro_picture: urlUpload ? urlUpload : data?.pro_picture + ""
+                pro_picture: urlUpload ? urlUpload : data?.pro_picture + "",
+                pro_quantity: values.pro_quantity
             }
             setLoading(true);
             const res = await updateProductAPI(data?._id!, dataConfig)
@@ -112,6 +114,7 @@ const UpdateProductModal = (props: IProps) => {
         form.setFieldValue("pro_discount", data?.pro_discount)
         form.setFieldValue("pro_description", data?.pro_description)
         form.setFieldValue("pro_size", data?.pro_size)
+        form.setFieldValue("pro_quantity", data?.pro_quantity)
         form.setFieldValue("update_at", data?.update_at)
         form.setFieldValue("create_at", data?.create_at)
         form.setFieldValue("pro_picture", [
@@ -159,16 +162,39 @@ const UpdateProductModal = (props: IProps) => {
                             }
                         </Select>
                     </Form.Item>
-                    <Form.Item
-                        hasFeedback
-                        label="Name"
-                        name="pro_name"
-                        rules={[{ required: true, message: 'Please input your product name!' },
-
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
+                    <Row gutter={[15, 15]}>
+                        <Col span={24} md={14}>
+                            <Form.Item
+                                hasFeedback
+                                label="Name"
+                                name="pro_name"
+                                rules={[{ required: true, message: 'Please input your product name!' },
+                                ]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                        <Col span={24} md={10}>
+                            <Form.Item
+                                extra={formatNumberDot(`${!quantity ? 0 : quantity}`) + " SL"}
+                                hasFeedback
+                                label="Quantity"
+                                name="pro_quantity"
+                                rules={[{ required: true, message: "Please input your product quantity!" },
+                                () => ({
+                                    validator(_, value) {
+                                        if (!value || Number(value) > 0) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error("Price must be greater than 0!"));
+                                    },
+                                }),
+                                ]}
+                            >
+                                <InputNumber style={{ width: "100%" }} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
                     <Row gutter={[15, 15]}>
                         <Col span={24} md={8}>

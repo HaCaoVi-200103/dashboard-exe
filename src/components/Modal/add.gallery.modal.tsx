@@ -6,7 +6,7 @@ import {
     Image,
 } from 'antd';
 import Cookies from "js-cookie";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppContext } from '../../context/AppContext';
 import { DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import Dragger from 'antd/es/upload/Dragger';
@@ -28,12 +28,17 @@ const AddGalleryModal = (props: IProps) => {
     const [loading, setLoading] = useState(false);
     const [listPicture, setListPicture] = useState<string[]>([])
     const uploadErrorShown = useRef(false);
+    const [dataImage, setDataImage] = useState<IGallery[]>([])
 
     const handleCloseCreateModal = () => {
         form.resetFields()
         setLoading(false)
         setIsGalleryModalOpen(false);
     }
+
+    useEffect(() => {
+        setDataImage(listGallery)
+    }, [listGallery])
 
     const onFinish = async () => {
         try {
@@ -118,6 +123,8 @@ const AddGalleryModal = (props: IProps) => {
             const res = await deleteGalleryAPI(id)
 
             if (res.statusCode === 200) {
+                const data = dataImage.filter(x => x._id !== id)
+                setDataImage(data)
                 return notification.success({ message: res.message })
             }
             return notification.error({ message: res.message })
@@ -143,7 +150,7 @@ const AddGalleryModal = (props: IProps) => {
                     display: "flex", gap: 10, marginBottom: 15
                 }} >
                     {
-                        listGallery && listGallery.length > 0 && listGallery.map((item, index) => (
+                        dataImage && dataImage.length > 0 && dataImage.map((item, index) => (
                             <div key={index}
                                 style={{
                                     position: "relative"
