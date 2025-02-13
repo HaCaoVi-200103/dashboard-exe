@@ -1,15 +1,15 @@
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Button, notification, Popconfirm } from "antd";
+import { Button, Image, notification, Popconfirm } from "antd";
 import { ColumnsType } from "antd/es/table";
 import TableCustomize from "../../components/Table";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { deleteCategoryAPI } from "../../api/category";
-import CreateCategoryModal from "../Modal/create.category.modal";
-import UpdateCategoryModal from "../Modal/update.category.modal";
+import CreateBlogModal from "../Modal/create.blog.modal";
+import { deleteBlogAPI } from "../../api/blog";
 
 interface IProps {
-    dataSource: ICategory[];
+    dataSource: IBlog[];
     meta: {
         current: number,
         pageSize: number,
@@ -21,14 +21,14 @@ interface IProps {
     }
 }
 
-const CategoryTable = (props: IProps) => {
+const BlogTable = (props: IProps) => {
     const { dataSource, meta } = props;
-    const [dataTable, setDataTable] = useState<ICategory[] | []>(dataSource)
+    const [dataTable, setDataTable] = useState<IBlog[] | []>(dataSource)
     const [metaTable, setMetaTable] = useState(meta)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
     const [dataCateId, setDataCateId] = useState<any>(null)
-    const { refreshCategory, setRefreshCategory } = useAppContext()
+    const { setRefreshBlog, refreshBlog } = useAppContext()
 
     useEffect(() => {
         (async () => {
@@ -37,12 +37,12 @@ const CategoryTable = (props: IProps) => {
         })()
     }, [dataSource, meta])
 
-    const handleDeleteCategory = async (id: string) => {
+    const handleDeleteBlog = async (id: string) => {
         try {
-            const res = await deleteCategoryAPI(id);
+            const res = await deleteBlogAPI(id);
 
             if (res.statusCode === 200) {
-                setRefreshCategory(!refreshCategory)
+                setRefreshBlog(!refreshBlog)
                 notification.success({ message: res.message })
                 return;
             }
@@ -53,24 +53,50 @@ const CategoryTable = (props: IProps) => {
         }
     }
 
-    const columns: ColumnsType<ICategory> = [
+    const columns: ColumnsType<IBlog> = [
         {
-            title: 'Name',
-            dataIndex: 'cate_name',
+            title: 'Title',
+            dataIndex: 'title',
             key: 'pro_name',
         },
         {
-            title: 'Product',
-            dataIndex: 'product_count',
-            key: 'pro_picture',
-            render: (value) => (
-                <div>{value}</div>
+            title: 'Image',
+            dataIndex: 'images',
+            key: 'images',
+            render: (value: string[]) => (
+                <div style={{
+                    display: "flex",
+                    gap: 10
+                }}>
+                    {value && value.length > 0 && value.map(item => (
+                        <Image style={{
+                            width: "50px",
+                            height: "50px",
+                        }} src={item} />
+                    ))}
+                </div>
+            ),
+        },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description',
+            render: (value: string) => (
+                <div style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    textAlign: "justify"
+                }}>
+                    {value}
+                </div>
             ),
         },
         {
             title: 'Action',
-            dataIndex: 'is_deleted',
-            key: 'is_deleted',
+            dataIndex: '_id',
+            key: '_id',
             render: (__, record) => {
                 return (
                     <div style={{ display: "flex", gap: 20, justifyContent: "start" }}>
@@ -82,7 +108,7 @@ const CategoryTable = (props: IProps) => {
                             }} />
                         <Popconfirm
                             title="Are you sure delete category?"
-                            onConfirm={() => handleDeleteCategory(record._id)}
+                            onConfirm={() => handleDeleteBlog(record._id)}
                             // okText="Yes"
                             cancelText="No"
                         >
@@ -104,17 +130,17 @@ const CategoryTable = (props: IProps) => {
                 fontWeight: 600,
                 fontSize: 20,
             }}>
-                <span>Manage Category</span>
+                <span>Manage Blog</span>
                 <Button onClick={() => setIsCreateModalOpen(true)}>
                     <CloudUploadOutlined />
                     <span>Add New</span>
                 </Button>
             </div >
             <TableCustomize columns={columns} dataSource={dataTable} meta={metaTable} />
-            <CreateCategoryModal isCreateModalOpen={isCreateModalOpen} setIsCreateModalOpen={setIsCreateModalOpen} />
-            <UpdateCategoryModal dataCate={dataCateId} isUpdateModalOpen={isUpdateModalOpen} setIsUpdateModalOpen={setIsUpdateModalOpen} />
+            <CreateBlogModal isModalOpen={isCreateModalOpen} setIsModalOpen={setIsCreateModalOpen} />
+            {/*  <UpdateCategoryModal dataCate={dataCateId} isUpdateModalOpen={isUpdateModalOpen} setIsUpdateModalOpen={setIsUpdateModalOpen} /> */}
         </>
     )
 }
 
-export default CategoryTable;
+export default BlogTable;

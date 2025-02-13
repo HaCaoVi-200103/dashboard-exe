@@ -1,17 +1,18 @@
 import { useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
-import CategoryTable from "../../components/Table/category.table";
-import { getCategoryListAPI } from "../../api/category";
-import { notification, Skeleton } from "antd";
 
-const Category = () => {
+import { notification, Skeleton } from "antd";
+import BlogTable from "../../components/Table/blog.table";
+import { getBlogAllAPI } from "../../api/blog";
+
+const Blog = () => {
     const [searchParams] = useSearchParams();
     const current = searchParams.get("current") || "1";
     const pageSize = searchParams.get("pageSize") || "5";
-    const [data, setData] = useState<ICategory[] | []>([]);
+    const [data, setData] = useState<IBlog[] | []>([]);
     const [meta, setMeta] = useState({ current: 1, pageSize: 10, total: 1 });
-    const { refreshCategory } = useAppContext()
+    const { refreshBlog } = useAppContext()
     const [loading, setLoading] = useState(false)
 
 
@@ -19,7 +20,7 @@ const Category = () => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await getCategoryListAPI(+current, +pageSize);
+                const res = await getBlogAllAPI(+current, +pageSize);
                 setLoading(false)
 
                 if (res.statusCode !== 200) {
@@ -38,16 +39,16 @@ const Category = () => {
             }
         };
         fetchData();
-    }, [current, pageSize, refreshCategory]);
+    }, [current, pageSize, refreshBlog]);
 
     if (loading) {
         return <Skeleton />
     }
     return (
         <div>
-            <CategoryTable metaDefault={{ current: +current, LIMIT: +pageSize }} dataSource={data || []} meta={meta} />
+            <BlogTable metaDefault={{ current: +current, LIMIT: +pageSize }} dataSource={data || []} meta={meta} />
         </div>
     )
 }
 
-export default Category;
+export default Blog;

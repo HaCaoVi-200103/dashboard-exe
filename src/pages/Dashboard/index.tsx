@@ -30,8 +30,9 @@ const Dashboard = () => {
                     display: "flex",
                     gap: 30
                 }}>
-                    <TotalDashboardCard bg="linear-gradient(to right, #e6dada, #274046)" title="Total Product" total={100} />
-                    <TotalDashboardCard bg="linear-gradient(to right, #649173, #dbd5a4)" title="Total Order" total={100} />
+                    <TotalDashboardCard bg="linear-gradient(to right, #e6dada, #274046)" title="Total Product" total={24} />
+                    <TotalDashboardCard bg="linear-gradient(to right, #36d1dc, #5b86e5)" title="Total Blog" total={3} />
+                    <TotalDashboardCard bg="linear-gradient(to right, #649173, #dbd5a4)" title="Total Order" total={33} />
                 </div>
                 <div style={{
                     display: "flex",

@@ -9,6 +9,8 @@ interface AppContextType {
     setRefreshCategory: (v: boolean) => void;
     refreshGallery: boolean;
     setRefreshGallery: (v: boolean) => void
+    refreshBlog: boolean;
+    setRefreshBlog: (v: boolean) => void
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -18,12 +20,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [refreshProduct, setRefreshProduct] = useState(false)
     const [refreshCategory, setRefreshCategory] = useState(false)
     const [refreshGallery, setRefreshGallery] = useState(false)
+    const [refreshBlog, setRefreshBlog] = useState(false)
     return (
         <AppContext.Provider value={{
             collapseMenu, setCollapseMenu,
             refreshProduct, setRefreshProduct,
             refreshCategory, setRefreshCategory,
-            refreshGallery, setRefreshGallery
+            refreshGallery, setRefreshGallery,
+            refreshBlog, setRefreshBlog
         }}>
             {children}
         </AppContext.Provider>

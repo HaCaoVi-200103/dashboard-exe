@@ -90,4 +90,23 @@ declare global {
         pro_id: string,
         gal_picture: string,
     }
+
+    interface IBlog {
+        _id: string,
+        title: string,
+        images: string[],
+        description: string,
+        createdAt: string,
+        updatedAt: string,
+    }
+
+    interface IBlogResponse {
+        meta: {
+            current: number,
+            pageSize: number,
+            pages: number,
+            total: number
+        },
+        result: IBlog[]
+    }
 }

@@ -1,6 +1,7 @@
 import Layout from "antd/es/layout";
 import Menu from "antd/es/menu";
 import {
+    AppstoreAddOutlined,
     AppstoreOutlined,
     DollarOutlined,
     FileImageOutlined,
@@ -38,6 +39,11 @@ const DashboardSideBar = () => {
                     key: "/management-category",
                     label: <Link to={"/management-category"}>Category</Link>,
                     icon: <UnorderedListOutlined />,
+                },
+                {
+                    key: "/management-blog",
+                    label: <Link to={"/management-blog"}>Blog</Link>,
+                    icon: <AppstoreAddOutlined />,
                 },
                 {
                     key: "/management-order",
