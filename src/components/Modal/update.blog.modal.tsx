@@ -25,14 +25,12 @@ const UpdateBlogModal = (props: IProps) => {
     const { refreshBlog, setRefreshBlog } = useAppContext()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-    const [dataImage, setDataImage] = useState<IBlog | null>(null)
     const [imagesArr, setImagesArr] = useState<string[] | []>([])
     const [listPicture, setListPicture] = useState<string[]>([])
     const uploadErrorShown = useRef(false);
 
     useEffect(() => {
         if (data) {
-            setDataImage(data)
             setImagesArr(data.images)
         }
     }, [data])

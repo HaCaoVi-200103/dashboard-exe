@@ -1,5 +1,5 @@
 import TotalDashboardCard from "../../components/Card/cart.dashboard";
-import { Area, Bar, Funnel, Gauge, Heatmap, Line, Pie, Radar, Rose, Sunburst } from '@ant-design/charts';
+import { Line, Pie } from '@ant-design/charts';
 const Dashboard = () => {
     const data = [
         { year: '1991', value: 3 },
@@ -18,7 +18,17 @@ const Dashboard = () => {
         height: 400,
         xField: 'year',
         yField: 'value',
+    };
 
+    const configPie = {
+        data: [
+            { type: 'A', value: 30 },
+            { type: 'B', value: 20 },
+            { type: 'C', value: 50 },
+        ],
+        angleField: 'value',
+        colorField: 'type',
+        innerRadius: 0.6, // Tạo hình vòng tròn
     };
     return (
         <div style={{
@@ -31,7 +41,7 @@ const Dashboard = () => {
                     gap: 30
                 }}>
                     <TotalDashboardCard bg="linear-gradient(to right, #e6dada, #274046)" title="Total Product" total={24} />
-                    <TotalDashboardCard bg="linear-gradient(to right, #36d1dc, #5b86e5)" title="Total Blog" total={3} />
+                    <TotalDashboardCard bg="linear-gradient(to right, #f46b45, #eea849)" title="Total Blog" total={3} />
                     <TotalDashboardCard bg="linear-gradient(to right, #649173, #dbd5a4)" title="Total Order" total={33} />
                 </div>
                 <div style={{
@@ -63,7 +73,7 @@ const Dashboard = () => {
                                 borderRadius: 10,
                                 background: "white",
                             }}>
-                                <Pie width={300} {...config} />
+                                <Pie width={300} {...configPie} />
                             </div>
                         </div>
                     </div>

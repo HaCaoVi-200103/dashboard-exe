@@ -1,4 +1,4 @@
-import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, FilterOutlined, PlusCircleOutlined, PlusCircleTwoTone, SearchOutlined, UploadOutlined } from "@ant-design/icons";
+import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, FilterOutlined, PlusCircleTwoTone, SearchOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Image, notification, Popconfirm, Tooltip } from "antd";
 import { ColumnsType } from "antd/es/table";
 import InputCustomize from "../../components/Input";

@@ -4,7 +4,6 @@ import {
     AppstoreAddOutlined,
     AppstoreOutlined,
     DollarOutlined,
-    FileImageOutlined,
     TeamOutlined,
     UnorderedListOutlined,
 } from '@ant-design/icons';
