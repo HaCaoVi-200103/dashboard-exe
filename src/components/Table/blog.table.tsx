@@ -4,9 +4,9 @@ import { ColumnsType } from "antd/es/table";
 import TableCustomize from "../../components/Table";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { deleteCategoryAPI } from "../../api/category";
 import CreateBlogModal from "../Modal/create.blog.modal";
 import { deleteBlogAPI } from "../../api/blog";
+import UpdateBlogModal from "../Modal/update.blog.modal";
 
 interface IProps {
     dataSource: IBlog[];
@@ -27,7 +27,7 @@ const BlogTable = (props: IProps) => {
     const [metaTable, setMetaTable] = useState(meta)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
-    const [dataCateId, setDataCateId] = useState<any>(null)
+    const [dataBlog, setDataBlog] = useState<IBlog | null>(null)
     const { setRefreshBlog, refreshBlog } = useAppContext()
 
     useEffect(() => {
@@ -104,7 +104,7 @@ const BlogTable = (props: IProps) => {
                             style={{ fontSize: 20 }}
                             onClick={() => {
                                 setIsUpdateModalOpen(true);
-                                setDataCateId(record)
+                                setDataBlog(record)
                             }} />
                         <Popconfirm
                             title="Are you sure delete category?"
@@ -138,7 +138,7 @@ const BlogTable = (props: IProps) => {
             </div >
             <TableCustomize columns={columns} dataSource={dataTable} meta={metaTable} />
             <CreateBlogModal isModalOpen={isCreateModalOpen} setIsModalOpen={setIsCreateModalOpen} />
-            {/*  <UpdateCategoryModal dataCate={dataCateId} isUpdateModalOpen={isUpdateModalOpen} setIsUpdateModalOpen={setIsUpdateModalOpen} /> */}
+            <UpdateBlogModal data={dataBlog} isUpdateModalOpen={isUpdateModalOpen} setIsUpdateModalOpen={setIsUpdateModalOpen} />
         </>
     )
 }
