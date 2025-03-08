@@ -68,8 +68,8 @@ const BlogTable = (props: IProps) => {
                     display: "flex",
                     gap: 10
                 }}>
-                    {value && value.length > 0 && value.map(item => (
-                        <Image style={{
+                    {value && value.length > 0 && value.map((item, index) => (
+                        <Image key={index} style={{
                             width: "50px",
                             height: "50px",
                         }} src={item} />

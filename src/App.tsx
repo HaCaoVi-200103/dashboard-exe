@@ -10,6 +10,7 @@ const Category = lazy(() => import('./pages/Category'));
 const LayoutDashboard = lazy(() => import('./components/Layout'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Blog = lazy(() => import('./pages/Blog'));
+const Order = lazy(() => import('./pages/Order'));
 
 const App = () => {
 
@@ -35,6 +36,7 @@ const App = () => {
                   <Route path='management-product' element={<Product />} />
                   <Route path='management-category' element={<Category />} />
                   <Route path='management-blog' element={<Blog />} />
+                  <Route path='management-order' element={<Order />} />
                 </Route>
               </Route>
             </Routes>

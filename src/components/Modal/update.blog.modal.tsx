@@ -124,9 +124,11 @@ const UpdateBlogModal = (props: IProps) => {
     };
 
     useEffect(() => {
-        form.setFieldValue("title", data?.title)
-        form.setFieldValue("description", data?.description)
-    }, [isUpdateModalOpen, data])
+        form.setFieldsValue({
+            title: data?.title,
+            description: data?.description
+        });
+    }, [isUpdateModalOpen, data]);
 
     const handleRemoveImage = (url: string) => {
         setImagesArr(imagesArr.filter(x => x !== url))

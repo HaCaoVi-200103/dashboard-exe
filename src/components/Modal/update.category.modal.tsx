@@ -47,8 +47,8 @@ const UpdateCategoryModal = (props: IProps) => {
     };
 
     useEffect(() => {
-        form.setFieldValue("cate_name", dataCate?.cate_name)
-    }, [isUpdateModalOpen, dataCate])
+        form.setFieldsValue({ cate_name: dataCate?.cate_name });
+    }, [isUpdateModalOpen, dataCate, form])
 
     return (
         <div>

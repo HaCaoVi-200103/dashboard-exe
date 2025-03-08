@@ -1,35 +1,66 @@
+import { useEffect, useState } from "react";
 import TotalDashboardCard from "../../components/Card/cart.dashboard";
 import { Line, Pie } from '@ant-design/charts';
+import { getTotalAPI } from "../../api/login";
+import { getOrderAllAPI } from "../../api/order";
+import { useSearchParams } from "react-router";
 const Dashboard = () => {
-    const data = [
-        { year: '1991', value: 3 },
-        { year: '1992', value: 4 },
-        { year: '1993', value: 3.5 },
-        { year: '1994', value: 5 },
-        { year: '1995', value: 4.9 },
-        { year: '1996', value: 6 },
-        { year: '1997', value: 7 },
-        { year: '1998', value: 9 },
-        { year: '1999', value: 13 },
-    ];
+    const [dataRaw, setDataRaw] = useState<any[]>([])
+    const [searchParams] = useSearchParams();
+    const current = searchParams.get("current") || "1";
+    const pageSize = searchParams.get("pageSize") || "5";
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getOrderAllAPI(+current, +pageSize);
+                setDataRaw(res.data?.result || []);
+
+
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, [current, pageSize]);
+
+
+    // Chuyển đổi dữ liệu để vẽ biểu đồ
+    const data = dataRaw.map(order => ({
+        date: new Date(order.createdAt).toLocaleDateString(), // Chuyển thời gian thành ngày
+        total_price: order.total_price
+    }));
 
     const config = {
         data,
+        width: 900,
         height: 400,
-        xField: 'year',
-        yField: 'value',
+        xField: "date", // Trục X là ngày đặt hàng
+        yField: "total_price", // Trục Y là tổng giá trị đơn hàng
+        point: {
+            size: 5,
+            shape: "circle",
+        },
+        label: {
+            style: {
+                fontSize: 12,
+                fill: "#000",
+            },
+        },
     };
 
-    const configPie = {
-        data: [
-            { type: 'A', value: 30 },
-            { type: 'B', value: 20 },
-            { type: 'C', value: 50 },
-        ],
-        angleField: 'value',
-        colorField: 'type',
-        innerRadius: 0.6, // Tạo hình vòng tròn
-    };
+
+    const [total, setTotal] = useState<any>({})
+
+    useEffect(() => {
+        (async () => {
+            const res = await getTotalAPI();
+            if (res.statusCode === 200) {
+                setTotal(res.data)
+            }
+        })()
+    }, [])
     return (
         <div style={{
             display: "flex",
@@ -40,9 +71,9 @@ const Dashboard = () => {
                     display: "flex",
                     gap: 30
                 }}>
-                    <TotalDashboardCard bg="linear-gradient(to right, #e6dada, #274046)" title="Total Product" total={24} />
-                    <TotalDashboardCard bg="linear-gradient(to right, #f46b45, #eea849)" title="Total Blog" total={3} />
-                    <TotalDashboardCard bg="linear-gradient(to right, #649173, #dbd5a4)" title="Total Order" total={33} />
+                    <TotalDashboardCard bg="linear-gradient(to right, #e6dada, #274046)" title="Total Product" total={total ? total.product : 0} />
+                    <TotalDashboardCard bg="linear-gradient(to right, #f46b45, #eea849)" title="Total Blog" total={total ? total.blog : 0} />
+                    <TotalDashboardCard bg="linear-gradient(to right, #649173, #dbd5a4)" title="Total Order" total={total ? total.order : 0} />
                 </div>
                 <div style={{
                     display: "flex",
@@ -59,7 +90,7 @@ const Dashboard = () => {
                             borderRadius: 10,
                             background: "white"
                         }}>
-                            <Line width={900} {...config} />
+                            <Line  {...config} />
                         </div>
                     </div>
                     <div>
@@ -73,7 +104,7 @@ const Dashboard = () => {
                                 borderRadius: 10,
                                 background: "white",
                             }}>
-                                <Pie width={300} {...configPie} />
+                                {/* <Pie width={300} {...configPie} /> */}
                             </div>
                         </div>
                     </div>
